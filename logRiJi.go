@@ -49,7 +49,7 @@ type RiJi struct {
 }
 
 // 启动日记
-func RunRiJi() (*RiJi, error) {
+func RunRiJi(onFile bool) (*RiJi, error) {
 	var riJi *RiJi
 
 	riJi.RiJiShuChuTiShiPrintln(QianZhuiMing, "初始化中...")
@@ -67,36 +67,42 @@ func RunRiJi() (*RiJi, error) {
 		gin.DisableConsoleColor()
 		//控制台中的强制颜色输出。
 		//gin.ForceConsoleColor()
-		//是否存在日记目录=>不存在就创建
-		if !IsExistFileCatalog(logUrl) {
-			//创建目录
-			err := os.Mkdir(fmt.Sprintf("./%s", logUrl), os.ModePerm)
-			if err != nil {
-				return nil, errors.New("创建日记目录失败-" + err.Error())
+		if onFile {
+			//是否存在日记目录=>不存在就创建
+			if !IsExistFileCatalog(logUrl) {
+				//创建目录
+				err := os.Mkdir(fmt.Sprintf("./%s", logUrl), os.ModePerm)
+				if err != nil {
+					return nil, errors.New("创建日记目录失败-" + err.Error())
+				}
 			}
+			// 创建记录日志的文件
+			fileCreate, err := os.Create(url)
+			if err != nil {
+				return nil, errors.New("打开日记(控制台)Url失败-" + err.Error())
+			}
+			FileCreate = fileCreate
+			// 将日志同时写入文件和控制台
+			gin.DefaultWriter = io.MultiWriter(fileCreate, os.Stdout)
 		}
-		// 创建记录日志的文件
-		fileCreate, err := os.Create(url)
-		if err != nil {
-			return nil, errors.New("打开日记(控制台)Url失败-" + err.Error())
-		}
-		FileCreate = fileCreate
-		// 将日志同时写入文件和控制台
-		gin.DefaultWriter = io.MultiWriter(fileCreate, os.Stdout)
 	} else {
 		FileCreate = _riJi[0].FileCreate
 	}
 
-	//打开文件
-	fileOpenFile, err := os.OpenFile(url+".log", os.O_APPEND|os.O_CREATE, 666)
-	if err != nil {
-		return nil, errors.New("打开日记(log)Url失败-" + err.Error())
+	var FileOpenFile *os.File
+	var LoggerZhengChang, LoggerTiShi, LoggerJingGao *log.Logger
+	if onFile {
+		//打开文件
+		fileOpenFile, err := os.OpenFile(url+".log", os.O_APPEND|os.O_CREATE, 666)
+		if err != nil {
+			return nil, errors.New("打开日记(log)Url失败-" + err.Error())
+		}
+		FileOpenFile = fileOpenFile
+		//初始化日记格式
+		LoggerZhengChang = log.New(fileOpenFile, "[ZhengChang][正常]", log.Ldate|log.Lmicroseconds|log.Lshortfile) // 日志文件格式:log包含时间及文件行数
+		LoggerTiShi = log.New(fileOpenFile, "[TiShi][提示]", log.Ldate|log.Lmicroseconds|log.Lshortfile)           // 日志文件格式:log包含时间及文件行数
+		LoggerJingGao = log.New(fileOpenFile, "[JingGao][警告]", log.Ldate|log.Lmicroseconds|log.Lshortfile)       // 日志文件格式:log包含时间及文件行数
 	}
-	FileOpenFile := fileOpenFile
-	//初始化日记格式
-	LoggerZhengChang := log.New(fileOpenFile, "[ZhengChang][正常]", log.Ldate|log.Lmicroseconds|log.Lshortfile) // 日志文件格式:log包含时间及文件行数
-	LoggerTiShi := log.New(fileOpenFile, "[TiShi][提示]", log.Ldate|log.Lmicroseconds|log.Lshortfile)           // 日志文件格式:log包含时间及文件行数
-	LoggerJingGao := log.New(fileOpenFile, "[JingGao][警告]", log.Ldate|log.Lmicroseconds|log.Lshortfile)       // 日志文件格式:log包含时间及文件行数
 
 	riJi.RiJiShuChuTiShiPrintln(QianZhuiMing, "初始化完毕!")
 
