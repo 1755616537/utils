@@ -8,18 +8,18 @@ import (
 var store = base64Captcha.DefaultMemStore
 
 // 获取验证码
-func GetCaptcha() (string, string, error) {
+func GetCaptcha() (string, string, string, error) {
 	// 生成默认数字
 	driver := base64Captcha.DefaultDriverDigit
 	// 生成base64图片
 	c := base64Captcha.NewCaptcha(driver, store)
 
 	// 获取
-	id, b64s, err := c.Generate()
+	id, b64s, answer, err := c.Generate()
 	if err != nil {
-		return "", "", err
+		return "", "", "", err
 	}
-	return id, b64s, nil
+	return id, b64s, answer, nil
 }
 
 // 验证验证码

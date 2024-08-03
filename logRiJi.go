@@ -68,7 +68,7 @@ func RunRiJi() (*RiJi, error) {
 		//控制台中的强制颜色输出。
 		//gin.ForceConsoleColor()
 		//是否存在日记目录=>不存在就创建
-		if !GetPublic().IsExistFileCatalog(logUrl) {
+		if !IsExistFileCatalog(logUrl) {
 			//创建目录
 			err := os.Mkdir(fmt.Sprintf("./%s", logUrl), os.ModePerm)
 			if err != nil {

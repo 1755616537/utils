@@ -3,6 +3,7 @@ module github.com/1755616537/utils
 go 1.22.2
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.10.0
 	github.com/gogf/gf v1.16.9
 	github.com/gorilla/websocket v1.5.3
