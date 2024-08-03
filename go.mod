@@ -8,6 +8,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/micmonay/keybd_event v1.1.2
 	github.com/mojocn/base64Captcha v1.3.6
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	golang.org/x/crypto v0.25.0
 )
 
