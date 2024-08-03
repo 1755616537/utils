@@ -20,11 +20,11 @@ var (
 	_config *gjson.Json
 )
 
-type config struct {
+type GetConfigs struct {
 	filename string
 }
 
-func (this config) run() error {
+func (this GetConfigs) run() error {
 	riJiAlL, _ := GetRiJi()
 	riJi := riJiAlL[0]
 
