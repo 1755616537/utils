@@ -1,4 +1,4 @@
-module utils
+module github.com/1755616537/utils
 
 go 1.22.2
 
