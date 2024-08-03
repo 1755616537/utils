@@ -24,7 +24,7 @@ type GetConfigs struct {
 	filename string
 }
 
-func (this GetConfigs) run() error {
+func (this *GetConfigs) run() error {
 	riJiAlL, _ := GetRiJi()
 	riJi := riJiAlL[0]
 
