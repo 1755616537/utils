@@ -6,7 +6,6 @@ import (
 	"github.com/gogf/gf/encoding/gjson"
 	"github.com/gogf/gf/encoding/gyaml"
 	"io/ioutil"
-	"os"
 )
 
 /*
@@ -20,6 +19,40 @@ func (Config)GetFuWuQiJava1()string  {
 var (
 	_config *gjson.Json
 )
+
+type config struct {
+	filename string
+}
+
+func (this config) run() error {
+	riJiAlL, _ := GetRiJi()
+	riJi := riJiAlL[0]
+
+	if this.filename == "" {
+		this.filename = "config.yml"
+	}
+	configByte, err := ioutil.ReadFile(this.filename)
+	if err != nil {
+		errValue := fmt.Sprint("读取配置信息错误 - ", err.Error())
+		riJi.RiJiShuChuJingGaoFatal(errValue)
+		return errors.New(errValue)
+	}
+	configYml, err := gyaml.ToJson(configByte)
+	if err != nil {
+		errValue := fmt.Sprint("解析配置信息错误 - ", err.Error())
+		riJi.RiJiShuChuJingGaoFatal(errValue)
+		return errors.New(errValue)
+	}
+
+	_config, err = gjson.DecodeToJson(configYml)
+	if err != nil {
+		errValue := fmt.Sprint("解析配置信息错误 - ", err.Error())
+		riJi.RiJiShuChuJingGaoFatal(errValue)
+		return errors.New(errValue)
+	}
+
+	return nil
+}
 
 // 读配置文件信息
 func RunConfig() error {
@@ -68,17 +101,4 @@ func GetConfig(name string) interface{} {
 	}
 
 	return _config.Get(name)
-}
-
-// 是否是Linux环境
-func ZhengShiHuanJingOn() (bool, error) {
-	//获取当前目录路径
-	str, err := os.Getwd()
-	if err != nil {
-		return false, errors.New("获取当前目录路径失败")
-	}
-	if str[:1] == "/" {
-		return true, nil
-	}
-	return false, nil
 }

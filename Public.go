@@ -36,6 +36,19 @@ func ifTestEnv() bool {
 	return false
 }
 
+// 是否是Linux环境
+func ZhengShiHuanJingOn() (bool, error) {
+	//获取当前目录路径
+	str, err := os.Getwd()
+	if err != nil {
+		return false, errors.New("获取当前目录路径失败")
+	}
+	if str[:1] == "/" {
+		return true, nil
+	}
+	return false, nil
+}
+
 // 公钥加密
 func RsaEncrypt2(origData, publicKey []byte) ([]byte, error) {
 	block, _ := pem.Decode(publicKey)
