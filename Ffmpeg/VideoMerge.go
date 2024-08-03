@@ -3,8 +3,8 @@ package Ffmpeg
 import (
 	"errors"
 	"fmt"
+	"github.com/1755616537/utils"
 	"strings"
-	utils "util"
 )
 
 // 视频合成

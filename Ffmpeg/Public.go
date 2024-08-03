@@ -3,9 +3,9 @@ package Ffmpeg
 import (
 	"errors"
 	"fmt"
+	"github.com/1755616537/utils"
 	"os"
 	"strings"
-	utils "util"
 )
 
 // 是否开启日记
