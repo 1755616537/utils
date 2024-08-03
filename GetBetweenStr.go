@@ -1,6 +1,9 @@
 package utils
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // 取文本（字符串）中间
 func GetBetweenStr(str, start, end string) string {
@@ -17,4 +20,22 @@ func GetBetweenStr(str, start, end string) string {
 	}
 	str = string([]byte(str)[:m])
 	return str
+}
+
+// 取最右文本
+func GetRStr(str string, l int) string {
+	runeStr := []rune(str)
+	if len(runeStr) > 0 && len(str) >= l {
+		return fmt.Sprint(string(runeStr[len(runeStr)-l:]))
+	}
+	return ""
+}
+
+// 取最左文本
+func GetLStr(str string, l int) string {
+	runeStr := []rune(str)
+	if len(runeStr) > 0 && len(str) >= l {
+		return fmt.Sprint(string(runeStr[:l]))
+	}
+	return ""
 }

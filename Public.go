@@ -6,7 +6,35 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"os"
+	"path/filepath"
 )
+
+// 运行目录
+func RunDirectory() (string, error) {
+	var ex string
+	ex, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Dir(ex), nil
+}
+
+// 运行程序时是否编程时的环境
+func ifTestEnv() bool {
+	var ex string
+	ex, err := RunDirectory()
+	if err != nil {
+		panic(err)
+	}
+	if GetRStr(ex, 4) == "Temp" {
+		return true
+	}
+	if GetRStr(ex, 10) == "tmp\\GoLand" {
+		return true
+	}
+	return false
+}
 
 // 公钥加密
 func RsaEncrypt2(origData, publicKey []byte) ([]byte, error) {
