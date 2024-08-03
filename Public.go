@@ -21,7 +21,7 @@ func RunDirectory() (string, error) {
 }
 
 // 运行程序时是否编程时的环境
-func ifTestEnv() bool {
+func IfTestEnv() bool {
 	var ex string
 	ex, err := RunDirectory()
 	if err != nil {
