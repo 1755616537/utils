@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	cyanfile "github.com/dablelv/cyan/file"
 	"io"
 	"log"
 	"os"
@@ -68,4 +69,20 @@ func Getfile(fileNamem string) (string, error) {
 		return "", err
 	}
 	return string(data), nil
+}
+
+// 获取目录下所有文件和子目录名称（不会递归）
+func ListDir(dir string) ([]string, error) {
+	return cyanfile.ListDir(dir)
+}
+
+// 递归列出目录中的所有文件或目录路径。如果cur为真，则结果将包括当前目录。
+// 请注意，如果子目录是符号链接，则GetDirAllEntryPaths不会跟在符号链接后面。
+func ListDirEntryPaths(dir string, cur bool) ([]string, error) {
+	return cyanfile.ListDirEntryPaths(dir, cur)
+}
+
+// 递归列出目录中的所有文件或目录路径。如果cur为真，则结果将包括当前目录。
+func ListDirEntryPathsSymlink(dir string, cur bool) ([]string, error) {
+	return cyanfile.ListDirEntryPathsSymlink(dir, cur)
 }
