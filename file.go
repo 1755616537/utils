@@ -2,9 +2,11 @@ package utils
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	cyanfile "github.com/dablelv/cyan/file"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -71,6 +73,30 @@ func Getfile(fileNamem string) (string, error) {
 		return "", err
 	}
 	return string(data), nil
+}
+
+// 读入文件
+func Getfile1(fileNamem string) (string, error) {
+	file, err := os.Open(fileNamem)
+	if err != nil {
+		return "", errors.New(fmt.Sprint("打开文件错误:", err))
+	}
+	defer file.Close()
+
+	content, err := ioutil.ReadAll(file)
+	if err != nil {
+		return "", errors.New(fmt.Sprint("读取文件错误:", err))
+	}
+	return string(content), nil
+}
+
+// 读入文件
+func Getfile2(fileNamem string) (string, error) {
+	content, err := ioutil.ReadFile(fileNamem)
+	if err != nil {
+		return "", errors.New(fmt.Sprint("读取文件错误:", err))
+	}
+	return string(content), nil
 }
 
 // 获取目录下所有文件和子目录名称（不会递归）
