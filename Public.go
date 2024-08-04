@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strconv"
 )
 
 // 运行目录
@@ -92,4 +93,13 @@ func CleanString(input string) string {
 	re := regexp.MustCompile(`[^a-zA-Z0-9]`)
 	// Replace matched characters with an empty string.
 	return re.ReplaceAllString(input, "")
+}
+
+// 转换uint32类型
+func TyUint32(str string) (uint32, error) {
+	dateUint64Value, err := strconv.ParseUint(str, 10, 32)
+	if err != nil {
+		return 0, errors.New("【时间类型转换失败】")
+	}
+	return uint32(dateUint64Value), nil
 }

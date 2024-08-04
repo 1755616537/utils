@@ -2,7 +2,6 @@ package utils
 
 import (
 	"errors"
-	"strconv"
 	"time"
 )
 
@@ -20,11 +19,7 @@ func StringTotime(timeLayout, toBeCharge string) (*time.Time, error) {
 
 // 时间转换 【20060102】uint32类型
 func DateTyUint32(date time.Time) (uint32, error) {
-	dateUint64Value, err := strconv.ParseUint(date.Format("20060102"), 10, 32)
-	if err != nil {
-		return 0, errors.New("【时间类型转换失败】")
-	}
-	return uint32(dateUint64Value), nil
+	return TyUint32(date.Format("20060102"))
 }
 
 // 获取前n天工作日
