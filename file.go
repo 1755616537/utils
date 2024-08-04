@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 // 读取文本
@@ -85,4 +86,19 @@ func ListDirEntryPaths(dir string, cur bool) ([]string, error) {
 // 递归列出目录中的所有文件或目录路径。如果cur为真，则结果将包括当前目录。
 func ListDirEntryPathsSymlink(dir string, cur bool) ([]string, error) {
 	return cyanfile.ListDirEntryPathsSymlink(dir, cur)
+}
+
+// 获取目录下所有文件和子目录名称（不会递归） 指定后缀名
+func ListDirType(dir string, suffix string) ([]string, error) {
+	list, err := cyanfile.ListDir(dir)
+	if err != nil {
+		return nil, err
+	}
+	var resList []string
+	for i := 0; i < len(list); i++ {
+		if strings.HasSuffix(list[i], suffix) {
+			resList = append(resList, list[i])
+		}
+	}
+	return resList, nil
 }
