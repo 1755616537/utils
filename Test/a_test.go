@@ -19,3 +19,7 @@ func Test_file(t *testing.T) {
 	line, err := utils.LineByLine("C:\\Users\\17556\\Desktop/1.txt")
 	fmt.Println(line, len(line), err)
 }
+
+func Test_file2(t *testing.T) {
+	fmt.Println(utils.RemoveSuffix("600501.a.json"))
+}

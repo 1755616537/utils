@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	"fmt"
 	cyanfile "github.com/dablelv/cyan/file"
 	"io"
 	"log"
@@ -101,4 +102,21 @@ func ListDirType(dir string, suffix string) ([]string, error) {
 		}
 	}
 	return resList, nil
+}
+
+// 去除后缀名
+func RemoveSuffix(str string) string {
+	strArr := strings.Split(str, ".")
+	if len(strArr) > 0 {
+		str = ""
+		for i := 0; i < len(strArr)-1; i++ {
+			if i+1 == len(strArr)-1 {
+				str = fmt.Sprint(str, strArr[i])
+			} else {
+				str = fmt.Sprint(str, strArr[i], ".")
+			}
+		}
+	}
+
+	return str
 }
