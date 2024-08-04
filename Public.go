@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -102,4 +103,20 @@ func TyUint32(str string) (uint32, error) {
 		return 0, errors.New("【时间类型转换失败】")
 	}
 	return uint32(dateUint64Value), nil
+}
+
+// 涨跌幅，计算
+func CalculateChange(currentPrice float64, previousClosePrice float64) float64 {
+	change := (currentPrice - previousClosePrice) / previousClosePrice * 100
+	return change
+}
+
+// 保留两位数
+func Float64To2u(number float64) string {
+	return fmt.Sprintf("%.2f", number)
+}
+
+// 保留两位数
+func Float64To2u2(number float64) string {
+	return strconv.FormatFloat(number, 'f', 2, 64)
 }
