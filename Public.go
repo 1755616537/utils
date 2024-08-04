@@ -8,6 +8,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"regexp"
 )
 
 // 运行目录
@@ -83,4 +84,12 @@ func JiSuanZongYeMa(total, pageSize int) int {
 	} else {
 		return total / pageSize
 	}
+}
+
+// 使用正则表达式清理字符串 [^a-zA-Z0-9]
+func CleanString(input string) string {
+	// Regular expression to match non-alphanumeric characters.
+	re := regexp.MustCompile(`[^a-zA-Z0-9]`)
+	// Replace matched characters with an empty string.
+	return re.ReplaceAllString(input, "")
 }

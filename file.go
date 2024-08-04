@@ -24,7 +24,11 @@ func LineByLine(file string) ([]string, error) {
 	var res []string
 	for {
 		line, err := r.ReadString('\n')
+		line = CleanString(line)
 		if err == io.EOF {
+			if line != "" {
+				res = append(res, line)
+			}
 			break
 		} else if err != nil {
 			log.Printf("error reading file %s", err)
