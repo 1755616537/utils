@@ -120,3 +120,17 @@ func Float64To2u(number float64) string {
 func Float64To2u2(number float64) string {
 	return strconv.FormatFloat(number, 'f', 2, 64)
 }
+
+// 把一个[]string按N个一份分成map
+
+func SplitSliceIntoChunks(slice []string, chunkSize int) map[int][]string {
+	chunks := make(map[int][]string)
+	for i := 0; i < len(slice); i += chunkSize {
+		end := i + chunkSize
+		if end > len(slice) {
+			end = len(slice)
+		}
+		chunks[i/chunkSize] = slice[i:end]
+	}
+	return chunks
+}
