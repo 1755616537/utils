@@ -8,11 +8,10 @@ import (
 )
 
 func Test_time(t *testing.T) {
-	timeArr, err := utils.DateAoArr(time.Now(), 20)
-	if err != nil {
-		return
-	}
-	fmt.Println(timeArr)
+	timeArr, err := utils.DateAoArr(time.Now(), 20, true)
+	fmt.Println(timeArr, err)
+	timeArr, err = utils.DateAoArr(time.Now(), 20, false)
+	fmt.Println(timeArr, err)
 }
 
 func Test_file(t *testing.T) {

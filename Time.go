@@ -23,13 +23,15 @@ func DateTyUint32(date time.Time) (uint32, error) {
 }
 
 // 获取前n天工作日
-func DateAoArr(date time.Time, daysBack int) ([]uint32, error) {
+func DateAoArr(date time.Time, daysBack int, dt bool) ([]uint32, error) {
 	var workDates []uint32
 
 	// 向前迭代直到找到
 	for len(workDates) < daysBack {
-		// 减去一天
-		date = date.AddDate(0, 0, -1)
+		if !dt {
+			// 减去一天
+			date = date.AddDate(0, 0, -1)
+		}
 
 		// 检查是否为工作日（周一至周五）
 		if !TimeIsWeekend(date) {
@@ -40,6 +42,11 @@ func DateAoArr(date time.Time, daysBack int) ([]uint32, error) {
 
 			// 添加到结果列表
 			workDates = append(workDates, u32date)
+		}
+
+		if dt {
+			// 减去一天
+			date = date.AddDate(0, 0, -1)
 		}
 	}
 
