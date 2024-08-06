@@ -120,32 +120,40 @@ func CalculateChange(currentPrice float64, previousClosePrice float64) float64 {
 
 // 涨停价 计算 10%是0.10
 // fmt.Printf("%.2f", limitUpPrice)
-func CalculateLimitUpPrice(closePrice, ra float64) float64 {
+func CalculateLimitUpPrice(price, limit float64) float64 {
 	// 计算涨停价增值
-	limitUpIncrement := closePrice * ra
-
+	limitUpIncrement := price * limit
 	// 四舍五入涨停价增值到最近的分位数
 	limitUpIncrementRounded := math.Round(limitUpIncrement*100) / 100
-
 	// 计算涨停价
-	limitUpPrice := closePrice + limitUpIncrementRounded
-
+	limitUpPrice := price + limitUpIncrementRounded
 	return limitUpPrice
+}
+
+// 涨停价 计算
+func CalculateLimitUpPrice2(price, limit float64) float64 {
+	lastClose := Decimal(price)
+	upStopPrice := Decimal(lastClose * (1.0000 + limit))
+	return upStopPrice
 }
 
 // 跌停价 计算 10%是0.10
 // fmt.Printf("%.2f", limitUpPrice)
-func CalculateLimitDownPrice(closePrice, ra float64) float64 {
+func CalculateLimitDownPrice(price, limit float64) float64 {
 	// 计算跌停价减少
-	limitDownDecrement := closePrice * ra
-
+	limitDownDecrement := price * limit
 	// 四舍五入跌停价减少到最近的分位数
 	limitDownDecrementRounded := math.Round(limitDownDecrement*100) / 100
-
 	// 计算跌停价
-	limitDownPrice := closePrice - limitDownDecrementRounded
-
+	limitDownPrice := price - limitDownDecrementRounded
 	return limitDownPrice
+}
+
+// 跌停价 计算
+func CalculateLimitDownPrice2(price, limit float64) float64 {
+	lastClose := Decimal(price)
+	upStopPrice := Decimal(lastClose * (1.0000 - limit))
+	return upStopPrice
 }
 
 // 保留两位数
