@@ -179,3 +179,25 @@ func SplitSliceIntoChunks(slice []string, chunkSize int) map[int][]string {
 	}
 	return chunks
 }
+
+// 颜色计算分成
+func ColorCLad(n float64) float64 {
+	var cn float64
+	if n >= 0 {
+		cn = 255 - (n * 50)
+		if cn > 180 {
+			cn = 180
+		} else if cn < 0 {
+			cn = 0
+		}
+	} else {
+		cn = 255 - (-n * 50)
+		if cn > 80 {
+			cn = 80
+		} else if cn < 0 {
+			cn = 0
+		}
+	}
+
+	return cn
+}
