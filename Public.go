@@ -7,11 +7,17 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"github.com/gogf/gf/util/grand"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strconv"
 )
+
+// 32位随机字符串
+func GetNonceStr(n int) string {
+	return grand.Str("qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890", n)
+}
 
 // 运行目录
 func RunDirectory() (string, error) {

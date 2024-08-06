@@ -2,8 +2,19 @@ package utils
 
 import (
 	"errors"
+	"strconv"
 	"time"
 )
+
+// 10位时间戳
+func Get10Timestamp(date time.Time) string {
+	return strconv.FormatInt(date.Unix(), 10)
+}
+
+func TimeToFormat(date time.Time) string {
+	return date.Format("2006/01/02 15:04:05.000000")
+
+}
 
 func StringTotime(timeLayout, toBeCharge string) (*time.Time, error) {
 	loc, err := time.LoadLocation("Local") //重要：获取时区
