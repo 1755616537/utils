@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/1755616537/utils"
+	"github.com/mdobak/go-xerrors"
 	"io"
 	"log/slog"
 	"os"
@@ -133,4 +134,10 @@ func GetIoWriter() io.Writer {
 // err := xerrors.New("something happened").
 func ErrorContext(ctx context.Context, ctxMsg string, err error) {
 	slog.ErrorContext(ctx, ctxMsg, slog.Any("error", err))
+}
+
+// 原生error转换成携带错误信息的error
+// xerrors.New(err)
+func ToXerror(err error) error {
+	return xerrors.New(err)
 }
