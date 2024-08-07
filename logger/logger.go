@@ -136,13 +136,48 @@ func ErrorContext(ctx context.Context, ctxMsg string, err error) {
 	slog.ErrorContext(ctx, ctxMsg, slog.Any("error", err))
 }
 
+type messageError struct {
+	msg string
+}
+
+func (e *messageError) Error() string {
+	return e.msg
+}
+
+func Message(msg string) error {
+	return &messageError{msg: msg}
+}
+
+func toError(val interface{}) error {
+	var err error
+	switch typ := val.(type) {
+	case error:
+		err = typ
+	case string:
+		err = xerrors.Message(typ)
+	case fmt.Stringer:
+		err = xerrors.Message(typ.String())
+	default:
+		err = xerrors.Message(fmt.Sprint(val))
+	}
+	return err
+}
+
+type withStackTrace struct {
+	err error
+}
+
+func (e *withStackTrace) Error() string {
+	return e.err.Error()
+}
+
 // 原生error转换成携带错误信息的error
 // xerrors.New(err)
 func ToXerror(err error) error {
-	return xerrors.New(err)
+	return xerrors.New(err.Error())
 }
 
 // 打印 错误
 func Error(msg string, err error) {
-	slog.Error(msg, slog.Any("error", err))
+	slog.Error(msg, slog.Any("error", ToXerror(err)))
 }

@@ -11,6 +11,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"runtime"
 	"strconv"
@@ -218,4 +219,37 @@ func GetErrorStack(pc uintptr) *ErrorStack_source {
 		File:     f.File,
 		Line:     f.Line,
 	}
+}
+
+// 返回 interface{} 类型的值中元素的数量
+func CountElements(data interface{}) int {
+	val := reflect.ValueOf(data)
+
+	switch val.Kind() {
+	case reflect.Slice, reflect.Array:
+		return val.Len()
+	case reflect.Map:
+		return len(val.MapKeys())
+	case reflect.Struct:
+		// 如果是结构体，返回字段数量
+		return val.NumField()
+	default:
+		// 对于其他类型，返回 0
+		return 0
+	}
+}
+
+// 返回结构体的字段名
+func GetStructFieldNames(v interface{}) []string {
+	val := reflect.ValueOf(v)
+	typeOfV := val.Type()
+
+	var fieldNames []string
+
+	for i := 0; i < val.NumField(); i++ {
+		fieldName := typeOfV.Field(i).Name
+		fieldNames = append(fieldNames, fieldName)
+	}
+
+	return fieldNames
 }

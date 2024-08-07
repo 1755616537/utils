@@ -3,6 +3,8 @@ package logger
 import (
 	"context"
 	"errors"
+	"fmt"
+	"github.com/1755616537/utils"
 	"github.com/mdobak/go-xerrors"
 	"log/slog"
 	"net/http"
@@ -31,8 +33,12 @@ func Test_log(t *testing.T) {
 		slog.Any("error", err),
 	)
 
+	err = ToXerror(xerrors.New("sad"))
+	err2 := ToXerror(errors.New("sad2"))
+	_ = err2
+
 	ctx := context.Background()
-	err = xerrors.New("something happened")
+	err = xerrors.New(errors.New("hhhhhhhh"))
 	slog.ErrorContext(ctx, "image uploaded", slog.Any("error", err))
 
 	err = errors.New("something happened2")
@@ -45,6 +51,11 @@ func Test_log(t *testing.T) {
 	slog.ErrorContext(ctx, "upload failed", slog.Any("error", err.Error()))
 
 	slog.Error("error2", err)
+}
+
+func Test_CountElements(t *testing.T) {
+	fmt.Println(utils.CountElements(errors.New("something happened3")))
+	fmt.Println(utils.CountElements(xerrors.New("something happened3")))
 }
 
 // slog.Logger 转换为 log.Logger
