@@ -4,11 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/1755616537/utils"
 	"github.com/gogf/gf/encoding/gjson"
 	"io"
 	"log"
 	"log/slog"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -60,14 +62,18 @@ func (h *PrettyHandler) Handle(ctx context.Context, r slog.Record) error {
 	}
 
 	var errfields *fmtErrtype
+	var errfieldsErrError string
 	fields := make(map[string]interface{}, r.NumAttrs())
 	r.Attrs(func(a slog.Attr) bool {
 		switch a.Value.Kind() {
 		case slog.KindAny:
 			switch v := a.Value.Any().(type) {
 			case error:
-				a.Value = fmtErr(v)
-				errfields = fmtErr2(v)
+				if printErrorStack {
+					a.Value = fmtErr(v)
+					errfields = fmtErr2(v)
+				}
+				errfieldsErrError = v.Error()
 			}
 		}
 
@@ -86,8 +92,13 @@ func (h *PrettyHandler) Handle(ctx context.Context, r slog.Record) error {
 		//	return err
 		//}
 
-		fields["error"] = errfields
-
+		if errfields.Trace != nil {
+			fields["error"] = errfields
+		} else {
+			fields["error"] = errfieldsErrError
+		}
+	} else if errfieldsErrError != "" {
+		fields["error"] = errfieldsErrError
 	}
 
 	b, err := json.MarshalIndent(fields, "", "  ")
@@ -101,17 +112,37 @@ func (h *PrettyHandler) Handle(ctx context.Context, r slog.Record) error {
 	message["data"] = r.Message
 	message["fields"] = fields
 
-	//_ = h.Handler.Handle(ctx, slog.NewRecord(time.Now(), r.Level, r.Message, r.PC))
 	if onLogFile {
 		_ = h.Handler.Handle(ctx, slog.NewRecord(r.Time, r.Level, gjson.New(message).MustToJsonString(), r.PC))
 		//h.l.Println(timeStr, r.Level.String()+":", r.Message, string(b))
-		fmt.Println(timeStr, level, msg, string(b))
 	} else {
 		//_ = h.Handler.Handle(ctx, slog.Record{
 		//	Level: r.Level,
 		//	PC:    r.PC,
 		//})
-		fmt.Println(timeStr, level, msg, string(b))
+	}
+
+	var errorStackB string
+	if printStack {
+		stack := make(map[string]interface{})
+		stack[StringToColor(slog.SourceKey, Yellow)] = utils.GetErrorStack(r.PC)
+		StackByte, err := json.MarshalIndent(stack, "", "  ")
+		if err != nil {
+			return err
+		}
+		errorStackB = strings.Replace(
+			string(StackByte),
+			"\"\\u001b[33msource\\u001b[0m\": {",
+			fmt.Sprint(
+				StringToColor(slog.SourceKey, Yellow),
+				": {",
+			),
+			1,
+		)
+	}
+	fmt.Println(timeStr, level, msg, string(b))
+	if printStack {
+		fmt.Println(errorStackB)
 	}
 
 	return nil

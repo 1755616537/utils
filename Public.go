@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"strconv"
 )
 
@@ -200,4 +201,21 @@ func ColorCLad(n float64) float64 {
 	}
 
 	return cn
+}
+
+type ErrorStack_source struct {
+	Function string `json:"function"`
+	File     string `json:"file"`
+	Line     int    `json:"line"`
+}
+
+// 报错错误栈获取
+func GetErrorStack(pc uintptr) *ErrorStack_source {
+	fs := runtime.CallersFrames([]uintptr{pc})
+	f, _ := fs.Next()
+	return &ErrorStack_source{
+		Function: f.Function,
+		File:     f.File,
+		Line:     f.Line,
+	}
 }

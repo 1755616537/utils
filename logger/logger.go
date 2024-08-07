@@ -19,8 +19,10 @@ var (
 	//log文件
 	fileOpenFile *os.File = os.Stdout
 	//使用error错误栈打印
-	//slog.ErrorContext(ctx, "err", slog.Any("error", err))
+	//slog.Error("err", slog.Any("error", err))
 	printErrorStack bool = true
+	//栈打印
+	printStack bool = true
 )
 
 func init() {
@@ -68,7 +70,7 @@ func IniLog() error {
 	}
 
 	opts := slog.HandlerOptions{
-		AddSource: printErrorStack,
+		AddSource: printStack,
 		Level:     slog.LevelDebug,
 		//ReplaceAttr: replaceAttr,
 	}
@@ -99,6 +101,11 @@ func IniLog() error {
 // 是否打印 error错误栈
 func SetPrintErrorStack(b bool) {
 	printErrorStack = b
+}
+
+// 是否打印 栈
+func SetprintStack(b bool) {
+	printStack = b
 }
 
 // 日记目录

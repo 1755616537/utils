@@ -35,13 +35,13 @@ func Test_log(t *testing.T) {
 	err = xerrors.New("something happened")
 	slog.ErrorContext(ctx, "image uploaded", slog.Any("error", err))
 
-	err = errors.New("something happened")
+	err = errors.New("something happened2")
 	slog.ErrorContext(ctx, "2", slog.Any("error", err))
 
-	err = errors.New("something happened")
+	err = errors.New("something happened3")
 	slog.ErrorContext(ctx, "3", slog.Any("error", xerrors.New(err)))
 
-	err = errors.New("something happened")
+	err = errors.New("something happened4")
 	slog.ErrorContext(ctx, "upload failed", slog.Any("error", err.Error()))
 }
 
