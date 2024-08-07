@@ -174,10 +174,22 @@ func (e *withStackTrace) Error() string {
 // 原生error转换成携带错误信息的error
 // xerrors.New(err)
 func ToXerror(err error) error {
+	if err == nil {
+		return xerrors.New("")
+	}
 	return xerrors.New(err.Error())
 }
 
 // 打印 错误
 func Error(msg string, err error) {
 	slog.Error(msg, slog.Any("error", ToXerror(err)))
+}
+
+// 打印 错误
+func ErrorS(msg ...string) {
+	var msgs string
+	for _, val := range msg {
+		msgs = fmt.Sprint(msgs, val)
+	}
+	Error(msgs, nil)
 }
