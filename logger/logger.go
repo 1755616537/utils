@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/1755616537/utils"
+	"io"
 	"log/slog"
 	"os"
 	"time"
@@ -95,23 +96,29 @@ func IniLog() error {
 	return nil
 }
 
-// error错误栈打印
+// 是否打印 error错误栈
 func SetPrintErrorStack(b bool) {
 	printErrorStack = b
 }
 
-func SetLogUrl(url string) error {
+// 日记目录
+func SetLogUrl(url string) {
 	logUrl = url
-	return IniLog()
 }
 
+// 日记目录
 func GetLogUrl() string {
 	return logUrl
 }
 
-func SetOnLogFile(on bool) error {
+// 是否打印日志到文件
+func SetOnLogFile(on bool) {
 	onLogFile = on
-	return IniLog()
+}
+
+// log文件IoWriter
+func GetIoWriter() io.Writer {
+	return fileOpenFile
 }
 
 // ctx := context.Background().
