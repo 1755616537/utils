@@ -37,7 +37,7 @@ func Exit() error {
 	return nil
 }
 
-// 初始化slog配置
+// 加载slog配置
 func IniLog() error {
 	err := Exit()
 	if err != nil {
