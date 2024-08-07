@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"github.com/gogf/gf/encoding/gjson"
 	"github.com/gogf/gf/encoding/gyaml"
-	"github.com/mdobak/go-xerrors"
 	"io/ioutil"
-	"log/slog"
 )
 
 /*
@@ -29,31 +27,21 @@ type GetConfigs struct {
 
 // 加载配置文件数据
 func (this *GetConfigs) Ini() error {
-	riJiAlL, _ := GetRiJi()
-	riJi := riJiAlL[0]
-
 	if this.fileUrl == "" {
 		this.fileUrl = "config.yml"
 	}
 	configByte, err := ioutil.ReadFile(this.fileUrl)
 	if err != nil {
-		errValue := fmt.Sprint("读取配置信息错误 - ", err.Error())
-		riJi.RiJiShuChuJingGaoFatal(errValue)
-		slog.Error("读取配置信息错误")
-		return errors.New(errValue)
+		return errors.New(fmt.Sprint("读取配置信息错误", err.Error()))
 	}
 	configYml, err := gyaml.ToJson(configByte)
 	if err != nil {
-		errValue := fmt.Sprint("解析配置信息错误 - ", err.Error())
-		riJi.RiJiShuChuJingGaoFatal(errValue)
-		return errors.New(errValue)
+		return errors.New(fmt.Sprint("解析配置信息错误", err.Error()))
 	}
 
 	_config, err = gjson.DecodeToJson(configYml)
 	if err != nil {
-		errValue := fmt.Sprint("解析配置信息错误 - ", err.Error())
-		riJi.RiJiShuChuJingGaoFatal(errValue)
-		return errors.New(errValue)
+		return errors.New(fmt.Sprint("解析配置信息错误", err.Error()))
 	}
 
 	return nil
@@ -61,9 +49,6 @@ func (this *GetConfigs) Ini() error {
 
 // 读配置文件信息
 func RunConfig() error {
-	riJiAlL, _ := GetRiJi()
-	riJi := riJiAlL[0]
-
 	//是否是Linux环境
 	filename := "config2.yml"
 	{
@@ -78,22 +63,16 @@ func RunConfig() error {
 
 	configByte, err := ioutil.ReadFile(filename)
 	if err != nil {
-		errValue := fmt.Sprint("读取配置信息错误 - ", err.Error())
-		riJi.RiJiShuChuJingGaoFatal(errValue)
-		return errors.New(errValue)
+		return errors.New(fmt.Sprint("读取配置信息错误", err.Error()))
 	}
 	configYml, err := gyaml.ToJson(configByte)
 	if err != nil {
-		errValue := fmt.Sprint("解析配置信息错误 - ", err.Error())
-		riJi.RiJiShuChuJingGaoFatal(errValue)
-		return errors.New(errValue)
+		return errors.New(fmt.Sprint("解析配置信息错误", err.Error()))
 	}
 
 	_config, err = gjson.DecodeToJson(configYml)
 	if err != nil {
-		errValue := fmt.Sprint("解析配置信息错误 - ", err.Error())
-		riJi.RiJiShuChuJingGaoFatal(errValue)
-		return errors.New(errValue)
+		return errors.New(fmt.Sprint("解析配置信息错误", err.Error()))
 	}
 
 	return nil
@@ -106,9 +85,4 @@ func GetConfig(name string) interface{} {
 	}
 
 	return _config.Get(name)
-}
-
-// 原生error转换成携带错误信息的error
-func ToXerror(err error) error {
-	return xerrors.New(err)
 }
