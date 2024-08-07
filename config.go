@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"github.com/gogf/gf/encoding/gjson"
 	"github.com/gogf/gf/encoding/gyaml"
+	"github.com/mdobak/go-xerrors"
 	"io/ioutil"
+	"log/slog"
 )
 
 /*
@@ -21,20 +23,23 @@ var (
 )
 
 type GetConfigs struct {
-	filename string
+	//配置文件路径
+	fileUrl string
 }
 
-func (this *GetConfigs) Run() error {
+// 加载配置文件数据
+func (this *GetConfigs) Ini() error {
 	riJiAlL, _ := GetRiJi()
 	riJi := riJiAlL[0]
 
-	if this.filename == "" {
-		this.filename = "config.yml"
+	if this.fileUrl == "" {
+		this.fileUrl = "config.yml"
 	}
-	configByte, err := ioutil.ReadFile(this.filename)
+	configByte, err := ioutil.ReadFile(this.fileUrl)
 	if err != nil {
 		errValue := fmt.Sprint("读取配置信息错误 - ", err.Error())
 		riJi.RiJiShuChuJingGaoFatal(errValue)
+		slog.Error("读取配置信息错误")
 		return errors.New(errValue)
 	}
 	configYml, err := gyaml.ToJson(configByte)
@@ -101,4 +106,9 @@ func GetConfig(name string) interface{} {
 	}
 
 	return _config.Get(name)
+}
+
+// 原生error转换成携带错误信息的error
+func ToXerror(err error) error {
+	return xerrors.New(err)
 }

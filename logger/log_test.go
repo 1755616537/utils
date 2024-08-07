@@ -11,6 +11,11 @@ import (
 )
 
 func Test_log(t *testing.T) {
+	err := IniLog()
+	if err != nil {
+		return
+	}
+
 	slog.Debug(
 		"executing database query",
 		slog.String("query", "SELECT * FROM users"),
@@ -20,14 +25,21 @@ func Test_log(t *testing.T) {
 		"storage is 90% full",
 		slog.String("available_space", "900.1 MB"),
 	)
+	err = errors.New("something happened")
 	slog.Error(
 		"An error occurred while processing the request",
-		slog.String("url", "https://example.com"),
+		slog.Any("error", err),
 	)
 
 	ctx := context.Background()
-	err := xerrors.New("something happened")
+	err = xerrors.New("something happened")
 	slog.ErrorContext(ctx, "image uploaded", slog.Any("error", err))
+
+	err = errors.New("something happened")
+	slog.ErrorContext(ctx, "2", slog.Any("error", err))
+
+	err = errors.New("something happened")
+	slog.ErrorContext(ctx, "3", slog.Any("error", xerrors.New(err)))
 
 	err = errors.New("something happened")
 	slog.ErrorContext(ctx, "upload failed", slog.Any("error", err.Error()))
