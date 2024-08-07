@@ -141,3 +141,8 @@ func ErrorContext(ctx context.Context, ctxMsg string, err error) {
 func ToXerror(err error) error {
 	return xerrors.New(err)
 }
+
+// 打印 错误
+func Error(msg string, err error) {
+	slog.Error(msg, slog.Any("error", err))
+}

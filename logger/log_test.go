@@ -43,6 +43,8 @@ func Test_log(t *testing.T) {
 
 	err = errors.New("something happened4")
 	slog.ErrorContext(ctx, "upload failed", slog.Any("error", err.Error()))
+
+	slog.Error("error2", err)
 }
 
 // slog.Logger 转换为 log.Logger
